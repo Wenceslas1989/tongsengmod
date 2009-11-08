@@ -1,11 +1,8 @@
 Tongsengmod
 ========
 
-Tongsengmod is a fork of the Tongseng project which is a [TUIO](http://tuio.org) wrapper 
-for Mac OS X multitouch events. This fork is to be used with the MultiTouchPad class of SuperCollider.
-
-Visis http://supercollider.sourceforge.net for more info abour SuperCollider.
-Visit [TUIO.org](http://tuio.org) for more information about TUIO.
+Tongsengmod is a fork of the [Tongseng](http://github.com/fajran/tongseng) project which is a [TUIO](http://tuio.org) wrapper 
+for Mac OS X multitouch events. This fork is to be used with the MultiTouchPad class of [SuperCollider](http://supercollider.sourceforge.net).
 
 Compilation
 -----------
