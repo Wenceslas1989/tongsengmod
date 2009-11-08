@@ -11,7 +11,7 @@ Compilation
 
 1. Retrieve the code using git:
 		
-		$ git://github.com/batuhan/tongsengmod.git
+		$ git clone git://github.com/batuhan/tongsengmod.git
 		
 2. Go to the source directory
 3. Type `make` and return.
