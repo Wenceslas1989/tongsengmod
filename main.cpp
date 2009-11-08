@@ -63,7 +63,6 @@ int main(int argc, char** argv)
 	std::cout << "Host: " << host << std::endl;
 	std::cout << "Port: " << port << std::endl;
 	std::cout << "Verbose: " << verbose << std::endl;
-	std::cout << "Press Ctrl+C to end this program." << std::endl;
 
 	signal(SIGINT, stop);
 	signal(SIGHUP, stop);
@@ -84,7 +83,7 @@ int main(int argc, char** argv)
 
 	tongseng_stop();
 
-	std::cout << "Program stopped." << std::endl;
+	std::cout << "Tongsengmod stopped." << std::endl;
 
 	return 0;
 }
