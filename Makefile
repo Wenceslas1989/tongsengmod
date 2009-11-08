@@ -1,6 +1,6 @@
 
 SRC=main.cpp \
-	tongseng.cpp \
+	tongsengmod.cpp \
 	TUIO/TuioServer.cpp \
 	TUIO/TuioTime.cpp \
 	TUIO/TuioManager.cpp \
@@ -19,7 +19,7 @@ SRC=main.cpp \
 OBJS=$(SRC:.cpp=.o)
 CPPFLAGS=-ITUIO -Ioscpack
 LIBS=-F/System/Library/PrivateFrameworks -framework MultitouchSupport
-BIN=tongseng
+BIN=tongsengmod
 
 all : $(BIN)
 

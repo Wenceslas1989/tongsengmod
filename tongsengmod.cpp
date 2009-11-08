@@ -1,4 +1,6 @@
-// Copyright (C) 2009  Fajran Iman Rusadi <fajran@gmail.com>
+// Fork from the Tongseng project (Fajran Iman Rusadi <fajran@gmail.com>)
+// for using it with the MultiTouchPad class of SuperCollider.
+// Copyright (C) Batuhan Bozkurt <batuhan@batuhanbozkurt.com>
 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,14 +18,14 @@
 
 // Based on multitouch code from http://www.steike.com/code/multitouch/
 
-#include "tongseng.h"
+#include "tongsengmod.h"
 #include "mt.h"
 #include <iostream>
 #include <math.h>
 #include <unistd.h>
 
 #include <TuioServer.h>
-#include <TuioCursor.h>
+#include <TuioObject.h>
 #include <TuioTime.h>
 
 #include <set>
@@ -58,7 +60,7 @@ static std::map<int, float> lastX;
 static std::map<int, float> lastY;
 
 // Finger to TUIO cursors mapping
-static std::map<int, TUIO::TuioCursor*> cursors;
+static std::map<int, TUIO::TuioObject*> cursors;
 
 // Check if a position changes is considered as a movement
 static inline bool isMoving(int id, float x, float y)
@@ -71,26 +73,26 @@ static inline bool isMoving(int id, float x, float y)
 }
 
 // New touch
-static void touch_add(int id, float x, float y)
+static void touch_add(int id, float x, float y, float size)
 {
 	D("touch_add: id=" << id << ", x=" << x << ", y=" << y);
 	lastX[id] = x;
 	lastY[id] = y;
 
-	TUIO::TuioCursor* cursor = server->addTuioCursor(x, y);
+	TUIO::TuioObject* cursor = server->addTuioObject(id, x, y, size);
 	cursors[id] = cursor;
 }
 
 // Update touch
-static void touch_update(int id, float x, float y)
+static void touch_update(int id, float x, float y, float size)
 {
 	if (isMoving(id, x, y)) {
 		D("touch_update: id=" << id << ", x=" << x << ", y=" << y);
 		lastX[id] = x;
 		lastY[id] = y;
 
-		TUIO::TuioCursor* cursor = cursors[id];
-		server->updateTuioCursor(cursor, x, y);
+		TUIO::TuioObject* cursor = cursors[id];
+		server->updateTuioObject(cursor, x, y, size);
 	}
 }
 
@@ -102,8 +104,8 @@ static void touch_remove(int id)
 
 	D("touch_remove: id=" << id);
 
-	TUIO::TuioCursor* cursor = cursors[id];
-	server->removeTuioCursor(cursor);
+	TUIO::TuioObject* cursor = cursors[id];
+	server->removeTuioObject(cursor);
 	cursors.erase(id);
 }
 
@@ -144,7 +146,7 @@ static void tuio_frame_begin()
 // Flush TUIO messages
 static void tuio_frame_end()
 {
-	server->stopUntouchedMovingCursors();
+	server->stopUntouchedMovingObjects();
 	server->commitFrame();
 }
 
@@ -167,14 +169,15 @@ static int callback(int device, Finger *data, int nFingers, double timestamp, in
 
 		float x = f->normalized.pos.x;
 		float y = 1.0f - f->normalized.pos.y; // reverse y axis
+		float size = f->size;
 		
 		if (EXISTS(currentFingers, id)) {
 			// update
-			touch_update(id, x, y);
+			touch_update(id, x, y, size);
 		}
 		else {
 			// add
-			touch_add(id, x, y);
+			touch_add(id, x, y, size);
 		}
 		fingers.insert(id);
 	}
@@ -204,10 +207,10 @@ static void tuio_start()
 	oscSender = new TUIO::UdpSender((char*)host.c_str(), port);
 	server = new TUIO::TuioServer(oscSender);
 	server->setVerbose(verbose);
-	server->setSourceName("Tongseng");
-	server->enableObjectProfile(false);
+	server->setSourceName("Tongsengmod");
+	server->enableObjectProfile(true);
 	server->enableBlobProfile(false);
-	server->enableCursorProfile(true);
+	server->enableCursorProfile(false);
 }
 
 // Release all active fingers

@@ -1,15 +1,15 @@
-#include "tongseng.h"
+#include "tongsengmod.h"
 #include <iostream>
 #include <signal.h>
 
 static bool running = false;
 static bool verbose = false;
 static std::string host("localhost");
-static int port = 3333;
+static int port = 57120;
 
 static void show_help()
 {
-	std::cout << "Usage: tongseng [options] [host] [port]" << std::endl;
+	std::cout << "Usage: tongsengmod [options] [host] [port]" << std::endl;
 	std::cout << "        -v verbose" << std::endl;
 	std::cout << "        -h show help" << std::endl;
 }
