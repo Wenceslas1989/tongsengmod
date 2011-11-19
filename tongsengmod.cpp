@@ -235,9 +235,15 @@ static void tuio_stop()
 }
 
 // Start handling multitouch events
-static void mt_start()
+static void mt_start(long n)
 {
-	dev = MTDeviceCreateDefault();
+	CFArrayRef devList = MTDeviceCreateList();
+	if((CFIndex)CFArrayGetCount(devList) - 1 < n)
+	{
+		std::cout << "Could not find external trackpad, defaulting to internal!" << std::endl;
+		n = 0; //defaulting to default
+	}
+	dev = (MTDeviceRef)CFArrayGetValueAtIndex(devList, n);
 	MTRegisterContactFrameCallback(dev, callback);
 	MTDeviceStart(dev, 0);
 }
@@ -264,9 +270,9 @@ void tongseng_set_verbose(int _verbose)
 }
 
 // Start Tongseng
-void tongseng_start()
+void tongseng_start(int _device)
 {
-	mt_start();
+	mt_start(_device);
 	tuio_start();
 	running = true;
 }
