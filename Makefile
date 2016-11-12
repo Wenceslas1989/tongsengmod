@@ -33,4 +33,4 @@ clean :
 	rm -f $(BIN) $(OBJS)
 
 install:
-	cp tongsengmod /usr/bin
+	cp tongsengmod /usr/local/bin
